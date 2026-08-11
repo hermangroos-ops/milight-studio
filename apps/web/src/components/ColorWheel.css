@@ -1,0 +1,41 @@
+.color-wheel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.color-wheel__disc {
+  position: relative;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
+  touch-action: none;
+  max-width: 100%;
+  cursor: crosshair;
+}
+
+.color-wheel__disc[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.color-wheel__marker {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 55%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition:
+    left var(--duration-fast) var(--easing),
+    top var(--duration-fast) var(--easing);
+}
+
+.color-wheel__readout {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}

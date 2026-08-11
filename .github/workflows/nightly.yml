@@ -1,0 +1,90 @@
+name: Nightly deep checks
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  mutation:
+    name: Mutation testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Stryker runs each package from a sandbox copy, so workspace siblings are resolved
+      # through their build output rather than their sources.
+      - run: pnpm run build
+      # Line coverage says the code ran; mutation score says the tests would have
+      # noticed if it had been wrong. Applied to the domain packages, where the
+      # colour maths and protocol translation actually live.
+      - run: pnpm run test:mutation
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-reports
+          path: packages/*/reports
+          retention-days: 14
+
+  load:
+    name: Load test the API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - name: Start the stack
+        run: |
+          node tests/e2e/stack.mjs &
+          echo $! > /tmp/stack.pid
+          for i in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/api/v1/health > /dev/null && break
+            sleep 2
+          done
+      - uses: grafana/setup-k6-action@v1
+      - name: Run k6
+        run: k6 run tests/load/api-smoke.js
+      - name: Stop the stack
+        if: always()
+        run: kill "$(cat /tmp/stack.pid)" || true
+
+  audit:
+    name: Dependency and secret audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Known vulnerabilities
+        run: pnpm audit --audit-level moderate
+      - name: Leaked secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Static analysis
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/typescript p/nodejs p/secrets

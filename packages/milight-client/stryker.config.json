@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/stryker-mutator/stryker-js/master/packages/api/schema/stryker-core.json",
+  "packageManager": "pnpm",
+  "testRunner": "vitest",
+  "reporters": ["html", "clear-text", "progress"],
+  "htmlReporter": {
+    "fileName": "reports/mutation/index.html"
+  },
+  "coverageAnalysis": "perTest",
+  "mutate": ["src/**/*.ts", "!src/**/*.test.ts", "!src/index.ts", "!src/types.ts"],
+  "ignoreStatic": true,
+  "thresholds": {
+    "high": 97,
+    "low": 92,
+    "break": 90
+  },
+  "timeoutMS": 20000,
+  "plugins": ["@stryker-mutator/vitest-runner"]
+}

@@ -1,0 +1,42 @@
+name: Bug report
+description: Something does not work
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Add an rgb_cct light on 0x1f2a group 1
+        2. Drag the brightness slider to 20%
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Milight Studio version
+      description: From Settings, or the image tag you are running.
+    validations:
+      required: true
+  - type: dropdown
+    id: remote-type
+    attributes:
+      label: Which remote type is the affected light?
+      options: [rgb_cct, fut089, rgbw, cct, fut091, rgb, fut020, "not applicable"]
+  - type: input
+    id: hub
+    attributes:
+      label: esp8266_milight_hub firmware version
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      render: text

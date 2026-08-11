@@ -1,0 +1,68 @@
+{
+  "name": "milight-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted controller for MiBoxer / Mi-Light lights via an esp8266_milight_hub, with groups, scenes and Alexa support.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22.11.0",
+    "pnpm": ">=10"
+  },
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "build": "pnpm -r --filter \"./packages/*\" build && pnpm -r --filter \"./apps/*\" build",
+    "dev": "pnpm --parallel --filter \"./apps/*\" dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --build --force",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:api": "vitest run --project api",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install --with-deps chromium",
+    "test:mutation": "pnpm -r --filter \"./packages/*\" test:mutation",
+    "test:load": "k6 run tests/load/api-smoke.js",
+    "verify": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test:coverage",
+    "clean": "git clean -xdf node_modules dist coverage .turbo",
+    "prepare": "husky || true"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^22.19.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.16.1",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4",
+    "vitest": "^3.2.4",
+    "@vitejs/plugin-react": "^5.1.0",
+    "@axe-core/playwright": "^4.11.0",
+    "jsdom": "^27.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css,html}": [
+      "prettier --write"
+    ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

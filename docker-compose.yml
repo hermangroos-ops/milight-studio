@@ -1,0 +1,48 @@
+services:
+  milight-studio:
+    image: ghcr.io/OWNER/milight-studio:latest
+    container_name: milight-studio
+    restart: unless-stopped
+
+    # Host networking is required for the Matter bridge (mDNS) and for Hue emulation
+    # (SSDP multicast). If you use neither, comment it out and use the ports mapping.
+    network_mode: host
+    # ports:
+    #   - "8080:8080"
+
+    environment:
+      MILIGHT_HUB_URL: http://192.168.1.42
+      TZ: Europe/Amsterdam
+
+      # Alexa over Matter — full colour, local, free. Needs a Matter-capable Echo.
+      MATTER_BRIDGE_ENABLED: "true"
+      MATTER_STORAGE_DIR: /data/matter
+
+      # Legacy alternative; on/off and brightness only. See docs/alexa.md.
+      # HUE_BRIDGE_ENABLED: "true"
+
+      # Uncomment to require a bearer token on the API.
+      # API_TOKEN: change-me-to-something-long
+
+    volumes:
+      - milight-studio-data:/data
+
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8080/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  milight-studio-data:

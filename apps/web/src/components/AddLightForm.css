@@ -1,0 +1,7 @@
+.add-light-form {
+  display: block;
+}
+
+.add-light-form .button[type='submit'] {
+  width: 100%;
+}

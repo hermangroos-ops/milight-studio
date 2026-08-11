@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Hardware and pairing questions
+    url: https://github.com/sidoh/esp8266_milight_hub/wiki
+    about: Wiring, flashing and radio problems are usually answered in the hub project's wiki.

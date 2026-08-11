@@ -1,0 +1,39 @@
+.light-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.light-card__identity {
+  min-width: 0;
+}
+
+.light-card__name {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  overflow-wrap: anywhere;
+}
+
+.light-card__meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.light-card__badges {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+.light-card__badges:empty {
+  display: none;
+}
+
+.light-card__footer {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: var(--space-3);
+}

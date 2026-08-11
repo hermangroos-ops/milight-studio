@@ -1,0 +1,26 @@
+.effect-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.effect-picker__label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.effect-picker__row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: stretch;
+}
+
+.effect-picker__select {
+  flex: 1;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
