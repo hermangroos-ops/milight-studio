@@ -78,8 +78,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Production dependencies only: what ships in the container is the gate here.
+      # Dev-dependency advisories still surface through Dependabot alerts and PRs.
       - name: Known vulnerabilities
-        run: pnpm audit --audit-level moderate
+        run: pnpm audit --audit-level moderate --prod
       - name: Leaked secrets
         uses: gitleaks/gitleaks-action@v2
         env:
