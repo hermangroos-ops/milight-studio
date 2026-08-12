@@ -50,7 +50,10 @@ LABEL org.opencontainers.image.title="Milight Studio" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.version="$APP_VERSION"
 
+# The runtime never installs packages, and npm's own bundled dependencies are what
+# the image scan keeps flagging - so the image ships without npm and corepack.
 RUN apk add --no-cache tini && \
+    rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack && \
     mkdir -p /data && chown -R node:node /data
 
 WORKDIR /app
