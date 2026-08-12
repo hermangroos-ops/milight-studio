@@ -30,10 +30,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Prettier
         run: pnpm run format:check
-      - name: ESLint
-        run: pnpm run lint
+      # tsc --build emits the workspace packages' dist/ output. ESLint's type-aware
+      # rules resolve @milight-studio/* through those build artefacts, so the order
+      # matters: types first, then lint.
       - name: TypeScript
         run: pnpm run typecheck
+      - name: ESLint
+        run: pnpm run lint
 
   test:
     name: Unit, integration and API tests
@@ -122,7 +125,7 @@ jobs:
           docker rm -f milight-ci
           exit 1
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: milight-studio:ci
           format: table
