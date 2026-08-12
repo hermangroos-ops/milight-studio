@@ -125,10 +125,6 @@ jobs:
           docker rm -f milight-ci
           exit 1
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: milight-studio:ci
-          format: table
-          exit-code: "1"
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
+        # Runs Trivy from its own container image: the setup action resolves the
+        # tag through the GitHub API, which is rate-limited on shared runners.
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/aquasecurity/trivy:0.73.0 image --exit-code 1 --ignore-unfixed --severity CRITICAL,HIGH milight-studio:ci
