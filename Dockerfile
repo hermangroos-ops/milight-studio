@@ -3,7 +3,7 @@
 # --------------------------------------------------------------------------------------
 # Build stage: install the whole workspace, typecheck, build the server and the web UI.
 # --------------------------------------------------------------------------------------
-FROM node:22-alpine AS builder
+FROM node:26-alpine AS builder
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=$PNPM_HOME:$PATH
@@ -35,7 +35,7 @@ RUN pnpm --filter @milight-studio/server deploy --legacy --prod /deploy
 # --------------------------------------------------------------------------------------
 # Runtime stage: no package manager, no build tools, no dev dependencies.
 # --------------------------------------------------------------------------------------
-FROM node:22-alpine AS runtime
+FROM node:26-alpine AS runtime
 
 ARG APP_VERSION=0.0.0-dev
 ENV NODE_ENV=production \
