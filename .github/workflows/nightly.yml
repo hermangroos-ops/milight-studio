@@ -83,7 +83,7 @@ jobs:
       - name: Known vulnerabilities
         run: pnpm audit --audit-level moderate --prod
       - name: Leaked secrets
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Static analysis
