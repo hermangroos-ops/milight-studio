@@ -1,6 +1,6 @@
 {
   "name": "milight-studio",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Self-hosted controller for MiBoxer / Mi-Light lights via an esp8266_milight_hub, with groups, scenes and Alexa support.",
   "license": "MIT",
